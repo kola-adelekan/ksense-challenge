@@ -25,9 +25,10 @@ app.post("/", async (req: Request, res: Response): Promise<any> => {
   
 
     try {
+        console.log("req:", req.body);
         const payload: Payload = req.body;
-        await collection.insertOne(payload);
         console.log("received payload:", payload);
+        await collection.insertOne(payload);
 
         const secretMessage:string = payload.secretMessage || "no secret found";
         return res.json({ message: secretMessage });
