@@ -1,7 +1,7 @@
 import express from "express";
-import type { Request, Response } from "express";
-import fs from "fs/promises"; 
+import type { Request, Response } from "express"; 
 import dotenv from "dotenv";
+import { collection, connectDB } from "./config/db";
 
 
 dotenv.config();
@@ -11,24 +11,30 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 6000;
 
-let payload: any = null;
 
+// connect to DB
+connectDB();
+
+// payload type
+interface Payload {
+    secretMessage?: string;
+    [key: string]: any; 
+  }
+  
 app.post("/", async (req: Request, res: Response): Promise<any> => {
   
 
-    payload = req.body;
-    console.log("received payload:", payload);
-
     try {
-        await fs.writeFile("payload.json", JSON.stringify(payload, null, 2));
+        const payload: Payload = req.body;
+        await collection.insertOne(payload);
+        console.log("received payload:", payload);
+
+        const secretMessage:string = payload.secretMessage || "no secret found";
+        return res.json({ message: secretMessage });
     } catch (error) {
-        console.error("Error saving payload:", error);
-        return res.status(500).json({ message: "error saving payload" });
+        console.error("error saving payload:", error);
+        res.status(500).json({ message: "error saving payload" });
     }
-
-    const secretMessage = payload.secretMessage || "no secret found";
-
-    return res.json({ message: secretMessage });
 });
 
-app.listen(PORT, () => console.log(`webhook listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));
