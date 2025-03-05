@@ -1,17 +1,18 @@
 # Webhook Server
 
-This is a simple webhook server built using **Express** and **TypeScript**. It listens for incoming POST requests and stores the payload in a JSON file.
+This is a simple webhook server built using **Express**, **TypeScript**, and **MongoDB**. It listens for incoming POST requests and stores the payload in a MongoDB database.
 
 ## Features
 - Accepts POST requests
-- Stores received payload in a `payload.json` file
-- Uses async/await for file operations
+- Stores received payload in a MongoDB collection
+- Uses async/await for database operations
 - Configurable via environment variables
 
 ## Prerequisites
 Make sure you have the following installed:
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
+- [MongoDB](https://www.mongodb.com/)
 
 ## Installation
 1. Clone the repository:
@@ -25,9 +26,10 @@ Make sure you have the following installed:
    ```
 
 ## Configuration
-Create a **`.env`** file in the root directory and set the port:
+Create a **`.env`** file in the root directory and set the following environment variables:
 ```sh
 PORT=8000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/ksense-challenge?retryWrites=true&w=majority
 ```
 
 ## Running the Server
@@ -62,8 +64,7 @@ npx ts-node src/server.ts
   }
   ```
 - **Error Responses:**
-  - `400 Bad Request`: Payload already received
-  - `500 Internal Server Error`: Error saving payload
+  - `500 Internal Server Error`: Error saving payload to the database
 
 ## Testing with Postman
 1. Open [Postman](https://www.postman.com/).
