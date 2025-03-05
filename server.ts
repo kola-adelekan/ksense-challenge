@@ -27,8 +27,8 @@ app.post("/webhook", async (req: Request, res: Response): Promise<any> => {
     try {
     
         const payload: Payload = req.body;
-        console.log("received payload:", payload);
         await collection.insertOne(payload);
+        console.log("received payload:", payload);
 
         const secretMessage:string = payload.secretMessage || "no secret found";
         return res.json({ message: secretMessage });
