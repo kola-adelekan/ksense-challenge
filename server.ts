@@ -21,11 +21,11 @@ interface Payload {
     [key: string]: any; 
   }
   
-app.post("/", async (req: Request, res: Response): Promise<any> => {
+app.post("/webhook", async (req: Request, res: Response): Promise<any> => {
   
 
     try {
-        console.log("req:", req.body);
+    
         const payload: Payload = req.body;
         console.log("received payload:", payload);
         await collection.insertOne(payload);
